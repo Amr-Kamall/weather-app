@@ -2,7 +2,6 @@ import { StatusBar } from "expo-status-bar";
 import {
   Image,
   Platform,
-  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,12 +12,72 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, theme } from "./theme";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import { debounce } from "lodash";
+import { weatherImages } from "./constants";
+// import getWeatherData from "./api/weather";
 
 export default function App() {
   const [openSearch, setOpenSearch] = useState(false);
-  const [locations, setLocations] = useState([1, 2, 3]);
+  const [locations, setLocations] = useState([]);
+  const [weatherData, setWeatherData] = useState({});
 
+  // icon ~~ weather state text ~~ forecast
+
+  // weather data api
+  async function getWeatherData(city) {
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=7&aqi=no&alerts=no`
+      );
+      const data = await response.json();
+      setWeatherData({
+        humidity: data.current.humidity,
+        windSpeed: data.current.wind_kph,
+        temperature: Math.floor(data.current.temp_c),
+        locationName: data.location.name,
+        locationCountry: data.location.country,
+        icon: data.current.condition.icon,
+        time: data.location.localtime.split(" ")[1],
+        condition: data.current.condition.text,
+        forecastDays: data.forecast.forecastday,
+      });
+      // console.log(weatherData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  // search data api
+  async function getSearchData(city) {
+    try {
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/search.json?key=f7b444cfa99e4757bdb205128242011&q=${city}`
+      );
+      const locationData = await response.json();
+      setLocations(locationData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
+  function handleSearch(value) {
+    if (value.trim() === "") {
+      setLocations([]); // Clear locations if the input is empty
+      setWeatherData({}); // Optionally clear weather data
+      return;
+    }
+    if (value.length > 2) {
+      getSearchData(value);
+    }
+  }
+
+  function handleGetWeather(cityName) {
+    getWeatherData(cityName);
+    setOpenSearch(false);
+  }
+
+  const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
   return (
     <View style={styles.appContainer}>
       <StatusBar style="light" />
@@ -33,6 +92,7 @@ export default function App() {
           <View style={styles.searchInputContainer}>
             {openSearch && (
               <TextInput
+                onChangeText={handleTextDebounce}
                 placeholder="Search City"
                 style={styles.searchInput}
                 placeholderTextColor="white"
@@ -45,20 +105,21 @@ export default function App() {
               <Ionicons name="search" size={25} color="white" />
             </TouchableOpacity>
           </View>
-          {locations.length > 0 && openSearch && (
+          {locations?.length > 0 && openSearch && (
             <View style={styles.locationsContainer}>
-              {locations.map((loc, index) => (
+              {locations?.map((loc, index) => (
                 <TouchableOpacity
+                  onPress={() => handleGetWeather(loc.name)}
                   key={index}
                   style={
-                    index === locations.length - 1
+                    index === locations?.length - 1
                       ? styles.location
                       : [styles.location, styles.locationBorder]
                   }
                 >
                   <Ionicons name="location" size={24} color="gray" />
                   <Text style={styles.locationText}>
-                    London, United Kingdom
+                    {loc.name},{loc.country}
                   </Text>
                 </TouchableOpacity>
               ))}
@@ -69,19 +130,25 @@ export default function App() {
         <View style={styles.forecast}>
           {/* location */}
           <Text style={styles.cityLocation}>
-            London,<Text style={styles.capitalLocation}>United Kingdom</Text>
+            {weatherData.locationCountry},
+            <Text style={styles.capitalLocation}>
+              {weatherData.locationName}
+            </Text>
           </Text>
           {/* weather image */}
           <View style={styles.weatherImageContainer}>
             <Image
               style={styles.weatherImage}
-              source={require("./assets/images/partlycloudy.png")}
+              // icon of api is very bad so we will use our own icons
+              source={weatherImages[weatherData.condition]}
             />
           </View>
           {/* degree celcius */}
           <View>
-            <Text style={styles.weatherDegree}>23&deg;</Text>
-            <Text style={styles.weatherStatus}>partly cloudy</Text>
+            <Text style={styles.weatherDegree}>
+              {weatherData.temperature}&deg;
+            </Text>
+            <Text style={styles.weatherStatus}>{weatherData.condition}</Text>
           </View>
           {/* other stats */}
           <View style={styles.otherStats}>
@@ -90,21 +157,21 @@ export default function App() {
                 style={styles.imageState}
                 source={require("./assets/icons/wind.png")}
               />
-              <Text style={styles.textState}>22km</Text>
+              <Text style={styles.textState}>{weatherData.windSpeed}km</Text>
             </View>
             <View style={styles.otherState}>
               <Image
                 style={styles.imageState}
                 source={require("./assets/icons/drop.png")}
               />
-              <Text style={styles.textState}>23%</Text>
+              <Text style={styles.textState}>{weatherData.humidity}%</Text>
             </View>
             <View style={styles.otherState}>
               <Image
                 style={styles.imageState}
                 source={require("./assets/icons/sun.png")}
               />
-              <Text style={styles.textState}>6:05 Am</Text>
+              <Text style={styles.textState}>{weatherData.time} Am</Text>
             </View>
           </View>
         </View>
@@ -116,55 +183,23 @@ export default function App() {
           </View>
           <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
             {/* view */}
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
-            {/* view */}
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
-            <View style={styles.nextforecastDay}>
-              <Image
-                style={styles.nextDayImage}
-                source={require("./assets/images/heavyrain.png")}
-              />
-              <Text style={styles.nextDayDay}>monday</Text>
-              <Text style={styles.nextDayDegree}>13&deg;</Text>
-            </View>
+            {weatherData.forecastDays.map((item) => (
+              <View style={styles.nextforecastDay}>
+                <Image
+                  style={styles.nextDayImage}
+                  source={weatherImages[item.day.condition.text]}
+                />
+                <Text style={styles.nextDayDay}>
+                  {" "}
+                  {new Date(item.date).toLocaleDateString("en-US", {
+                    weekday: "long",
+                  })}
+                </Text>
+                <Text style={styles.nextDayDegree}>
+                  {item.day.avgtemp_c}&deg;
+                </Text>
+              </View>
+            ))}
           </ScrollView>
         </View>
       </SafeAreaView>
@@ -181,7 +216,7 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   searchContainer: {
-    height: "10%",
+    height: "8%",
     marginTop: Platform.OS === "android" ? 40 : 0,
   },
 
@@ -247,13 +282,14 @@ const styles = StyleSheet.create({
   forecast: {
     alignItems: "center",
     zIndex: 1, // Keep it below locationsContainer but above the background
-    height: "61%",
     justifyContent: "space-around",
+    marginVertical: 20,
   },
   cityLocation: {
     color: "white",
     fontSize: 25,
     fontWeight: "bold",
+    marginBottom: 20,
   },
   capitalLocation: {
     color: colors.gray300,
@@ -262,6 +298,7 @@ const styles = StyleSheet.create({
   weatherImageContainer: {
     height: 200,
     width: 200,
+    marginVertical: 10,
   },
   weatherImage: {
     width: "100%",
@@ -315,7 +352,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: theme.bgWhite(0.15),
     borderRadius: 20,
-    width: 90,
+    width: 100,
     padding: 5,
   },
   nextDayImage: {
