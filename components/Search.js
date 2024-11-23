@@ -10,28 +10,23 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, theme } from "../theme";
 import { useCallback, useState } from "react";
 import { debounce } from "lodash";
+import truncateText from "../helper";
+import { useWeather } from "../store/WeatherContext";
 
-export default function Search({
-  locations,
-  handleGetWeather,
-  setLocations,
-  getSearchData,
-  getWeatherData,
-}) {
+export default function Search() {
+  const { locations, getWeatherData, getSearchData, setLocations } =
+    useWeather();
   const [openSearch, setOpenSearch] = useState(false);
 
   function handleSearch(value) {
-    //search in countries
     if (value.trim() === "") {
       setLocations([]); // Clear locations if the input is empty
-      return;
-    }
-    if (value.length > 2) {
+    } else if (value.length > 2) {
       getSearchData(value);
     }
   }
   function handleGetWeather(cityName) {
-    //to get the selected country with the name
+    // To get the selected country with the name
     getWeatherData(cityName);
     setOpenSearch(false);
   }
@@ -69,11 +64,7 @@ export default function Search({
             >
               <Ionicons name="location" size={24} color="gray" />
               <Text style={styles.locationText}>
-                {loc.name.length > 20 ? loc.name.slice(0, 19) + ".." : loc.name}
-                ,
-                {loc.country.length > 20
-                  ? loc.country.slice(0, 19) + ".."
-                  : loc.country}
+                {truncateText(loc.name, 20)}, {truncateText(loc.country, 17)}
               </Text>
             </TouchableOpacity>
           ))}

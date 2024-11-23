@@ -1,27 +1,30 @@
 import { Image, StyleSheet, Text, View } from "react-native";
 import { weatherImages } from "../constants";
 import { colors } from "../theme";
+import { useWeather } from "../store/WeatherContext";
 
-export default function Forecast({ weatherData }) {
+export default function Forecast() {
+  const { currentWeather } = useWeather();
+
   return (
     <View style={styles.forecast}>
       {/* location */}
       <Text style={styles.cityLocation}>
-        {weatherData.locationCountry},
-        <Text style={styles.capitalLocation}>{weatherData.locationName}</Text>
+        {currentWeather.locationCountry},
+        <Text style={styles.capitalLocation}>{currentWeather.locationName}</Text>
       </Text>
       {/* weather image */}
       <View style={styles.weatherImageContainer}>
         <Image
           style={styles.weatherImage}
           // icon of api is very bad so we will use our own icons
-          source={weatherImages[weatherData.condition.toLowerCase()]}
+          source={weatherImages[currentWeather?.condition?.toLowerCase()]}
         />
       </View>
       {/* degree celcius */}
       <View>
-        <Text style={styles.weatherDegree}>{weatherData.temperature}&deg;</Text>
-        <Text style={styles.weatherStatus}>{weatherData.condition}</Text>
+        <Text style={styles.weatherDegree}>{currentWeather.temperature}&deg;</Text>
+        <Text style={styles.weatherStatus}>{currentWeather.condition}</Text>
       </View>
       {/* other stats */}
       <View style={styles.otherStats}>
@@ -30,21 +33,21 @@ export default function Forecast({ weatherData }) {
             style={styles.imageState}
             source={require("../assets/icons/wind.png")}
           />
-          <Text style={styles.textState}>{weatherData.windSpeed}km</Text>
+          <Text style={styles.textState}>{currentWeather.windSpeed}km</Text>
         </View>
         <View style={styles.otherState}>
           <Image
             style={styles.imageState}
             source={require("../assets/icons/drop.png")}
           />
-          <Text style={styles.textState}>{weatherData.humidity}%</Text>
+          <Text style={styles.textState}>{currentWeather.humidity}%</Text>
         </View>
         <View style={styles.otherState}>
           <Image
             style={styles.imageState}
             source={require("../assets/icons/sun.png")}
           />
-          <Text style={styles.textState}>{weatherData.time} Am</Text>
+          <Text style={styles.textState}>{currentWeather.time} Am</Text>
         </View>
       </View>
     </View>
@@ -57,14 +60,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 1, // Keep it below locationsContainer but above the background
     justifyContent: "space-around",
-    marginVertical: 20,
+    marginVertical: 12,
   },
   cityLocation: {
     color: "white",
     fontSize: 22,
     fontWeight: "bold",
     marginBottom: 20,
-    // maxHeight:"10%",
   },
   capitalLocation: {
     color: colors.gray300,

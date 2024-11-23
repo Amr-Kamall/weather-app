@@ -2,8 +2,11 @@ import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { theme } from "../theme";
 import { weatherImages } from "../constants";
+import { useWeather } from "../store/WeatherContext";
 
-export default function NextForecast({ weatherData }) {
+export default function NextForecast() {
+  const { currentWeather } = useWeather();
+
   return (
     <View style={styles.nextForecast}>
       <View style={styles.forecastCalendar}>
@@ -12,7 +15,7 @@ export default function NextForecast({ weatherData }) {
       </View>
       <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
         {/* view */}
-        {weatherData?.forecastDays?.map((item, index) => (
+        {currentWeather?.forecastDays?.map((item, index) => (
           <View key={index} style={styles.nextforecastDay}>
             <Image
               style={styles.nextDayImage}
