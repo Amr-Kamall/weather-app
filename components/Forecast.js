@@ -47,7 +47,7 @@ export default function Forecast() {
             style={styles.imageState}
             source={require("../assets/icons/sun.png")}
           />
-          <Text style={styles.textState}>{currentWeather.time} Am</Text>
+          <Text style={styles.textState}>{currentWeather.time}</Text>
         </View>
       </View>
     </View>

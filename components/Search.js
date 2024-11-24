@@ -10,8 +10,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, theme } from "../theme";
 import { useCallback, useState } from "react";
 import { debounce } from "lodash";
-import truncateText from "../helper";
 import { useWeather } from "../store/WeatherContext";
+import truncateText from "../helper";
 
 export default function Search() {
   const { locations, getWeatherData, getSearchData, setLocations } =
@@ -21,7 +21,8 @@ export default function Search() {
   function handleSearch(value) {
     if (value.trim() === "") {
       setLocations([]); // Clear locations if the input is empty
-    } else if (value.length > 2) {
+    }
+    if (value.length > 2) {
       getSearchData(value);
     }
   }

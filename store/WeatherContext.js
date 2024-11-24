@@ -21,7 +21,7 @@ function WeatherProvider({ children, updateLoading }) {
         locationName: data.location.name,
         locationCountry: data.location.country,
         icon: data.current.condition.icon,
-        time: data.location.localtime.split(" ")[1],
+        time: data.location.localtime.split(" ")[1], //give me 2024-11-24 14:03 Am
         condition: data.current.condition.text,
         forecastDays: data.forecast.forecastday,
       });
