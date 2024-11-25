@@ -2,6 +2,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { weatherImages } from "../constants";
 import { colors } from "../theme";
 import { useWeather } from "../store/WeatherContext";
+import { convertTo12Hour } from "../helper";
 
 export default function Forecast() {
   const { currentWeather } = useWeather();
@@ -11,7 +12,9 @@ export default function Forecast() {
       {/* location */}
       <Text style={styles.cityLocation}>
         {currentWeather.locationCountry},
-        <Text style={styles.capitalLocation}>{currentWeather.locationName}</Text>
+        <Text style={styles.capitalLocation}>
+          {currentWeather.locationName}
+        </Text>
       </Text>
       {/* weather image */}
       <View style={styles.weatherImageContainer}>
@@ -23,7 +26,9 @@ export default function Forecast() {
       </View>
       {/* degree celcius */}
       <View>
-        <Text style={styles.weatherDegree}>{currentWeather.temperature}&deg;</Text>
+        <Text style={styles.weatherDegree}>
+          {currentWeather.temperature}&deg;
+        </Text>
         <Text style={styles.weatherStatus}>{currentWeather.condition}</Text>
       </View>
       {/* other stats */}
@@ -47,7 +52,9 @@ export default function Forecast() {
             style={styles.imageState}
             source={require("../assets/icons/sun.png")}
           />
-          <Text style={styles.textState}>{currentWeather.time}</Text>
+          <Text style={styles.textState}>
+            {convertTo12Hour(currentWeather.time)}
+          </Text>
         </View>
       </View>
     </View>
@@ -60,7 +67,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     zIndex: 1, // Keep it below locationsContainer but above the background
     justifyContent: "space-around",
-    marginVertical: 12,
+    marginVertical: 10,
+    flex:1,
   },
   cityLocation: {
     color: "white",
@@ -75,7 +83,7 @@ const styles = StyleSheet.create({
   weatherImageContainer: {
     height: 200,
     width: 200,
-    marginVertical: 10,
+    marginVertical: 12,
   },
   weatherImage: {
     width: "100%",

@@ -39,6 +39,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeAreaView: {
     marginHorizontal: 10,
+    flex:1,
   },
   appContainer: {
     flex: 1,

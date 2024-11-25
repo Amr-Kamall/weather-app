@@ -3,6 +3,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { theme } from "../theme";
 import { weatherImages } from "../constants";
 import { useWeather } from "../store/WeatherContext";
+import { currentDay } from "../helper";
 
 export default function NextForecast() {
   const { currentWeather } = useWeather();
@@ -13,7 +14,11 @@ export default function NextForecast() {
         <Ionicons name="calendar-outline" color="white" size={20} />
         <Text style={styles.calendarText}>Daily forecast</Text>
       </View>
-      <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ gap: 10 }}
+      >
         {/* view */}
         {currentWeather?.forecastDays?.map((item, index) => (
           <View key={index} style={styles.nextforecastDay}>
@@ -24,12 +29,7 @@ export default function NextForecast() {
                 weatherImages["other"]
               }
             />
-            <Text style={styles.nextDayDay}>
-              {" "}
-              {new Date(item.date).toLocaleDateString("en-US", {
-                weekday: "long",
-              })}
-            </Text>
+            <Text style={styles.nextDayDay}>{currentDay(item.date)}</Text>
             <Text style={styles.nextDayDegree}>{item.day.avgtemp_c}&deg;</Text>
           </View>
         ))}
@@ -40,7 +40,7 @@ export default function NextForecast() {
 
 const styles = StyleSheet.create({
   nextForecast: {
-    marginTop: 15,
+    marginVertical: 15,
     marginHorizontal: 10,
   },
   forecastCalendar: {

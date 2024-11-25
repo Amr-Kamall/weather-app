@@ -11,7 +11,7 @@ import { colors, theme } from "../theme";
 import { useCallback, useState } from "react";
 import { debounce } from "lodash";
 import { useWeather } from "../store/WeatherContext";
-import truncateText from "../helper";
+import { truncateText } from "../helper";
 
 export default function Search() {
   const { locations, getWeatherData, getSearchData, setLocations } =
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     flexDirection: "row",
     gap: 10,
+    overflow: "hidden",
   },
   locationBorder: {
     borderBottomWidth: 1.2,

@@ -11,7 +11,7 @@ function WeatherProvider({ children, updateLoading }) {
     try {
       updateLoading(true);
       const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=7&aqi=no&alerts=no`
+        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=8&aqi=no&alerts=no`
       );
       const data = await response.json();
       setCurrentWeather({
@@ -21,9 +21,9 @@ function WeatherProvider({ children, updateLoading }) {
         locationName: data.location.name,
         locationCountry: data.location.country,
         icon: data.current.condition.icon,
-        time: data.location.localtime.split(" ")[1], //give me 2024-11-24 14:03 Am
+        time: data.location.localtime,
         condition: data.current.condition.text,
-        forecastDays: data.forecast.forecastday,
+        forecastDays: data.forecast.forecastday.slice(1),
       });
       updateLoading(false);
     } catch (error) {
