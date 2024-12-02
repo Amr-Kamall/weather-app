@@ -8,10 +8,6 @@ export default function Forecast() {
   // london => الطقس درجه الحراره
   const { currentWeather } = useWeather();
 
-  if (!currentWeather) {
-    return <Text>amr kamal</Text>;
-  }
-
   return (
     <View style={styles.forecast}>
       {/* location */}
@@ -74,7 +70,7 @@ const styles = StyleSheet.create({
     zIndex: 10000, // Keep it below locationsContainer but above the background
     justifyContent: "space-around",
     marginVertical: 8,
-    flex:1
+    flex: 1,
   },
   cityLocation: {
     color: "white",

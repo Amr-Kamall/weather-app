@@ -14,7 +14,7 @@ function WeatherProvider({ children, updateLoading }) {
         `https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${city}`
       );
       const locationData = await response.json();
-      // console.log(locationData);
+      console.log(locationData);
       setLocations(locationData);
     } catch (error) {
       console.error("Error fetching data:", error);
