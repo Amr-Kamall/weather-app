@@ -5,9 +5,8 @@ import Search from "./components/Search";
 import Loading from "./components/Loading";
 import Forecast from "./components/Forecast";
 import NextForecast from "./components/NextForecast";
-import { useWeather, WeatherProvider } from "./store/WeatherContext";
+import { WeatherProvider } from "./store/WeatherContext";
 
-//make fog image to weather
 export default function App() {
   const [loading, setLoading] = useState(true);
   return (
@@ -24,7 +23,7 @@ export default function App() {
         ) : (
           <SafeAreaView style={styles.safeAreaView}>
             {/* search section */}
-            <Search />
+            <Search /> 
             {/* forecast section */}
             <Forecast />
             {/* forecast for next days */}
@@ -39,7 +38,7 @@ export default function App() {
 const styles = StyleSheet.create({
   safeAreaView: {
     marginHorizontal: 10,
-    flex:1,
+    flex: 1,
   },
   appContainer: {
     flex: 1,

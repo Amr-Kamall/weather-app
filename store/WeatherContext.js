@@ -3,33 +3,9 @@ import { createContext, useContext, useEffect, useState } from "react";
 const WeatherContext = createContext();
 
 function WeatherProvider({ children, updateLoading }) {
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState([]); //list search
   const [currentWeather, setCurrentWeather] = useState({});
 
-  // weather data api
-  async function getWeatherData(city) {
-    try {
-      updateLoading(true);
-      const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=8&aqi=no&alerts=no`
-      );
-      const data = await response.json();
-      setCurrentWeather({
-        humidity: data.current.humidity,
-        windSpeed: data.current.wind_kph,
-        temperature: Math.floor(data.current.temp_c),
-        locationName: data.location.name,
-        locationCountry: data.location.country,
-        icon: data.current.condition.icon,
-        time: data.location.localtime,
-        condition: data.current.condition.text,
-        forecastDays: data.forecast.forecastday.slice(1),
-      });
-      updateLoading(false);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
   // search data api
   async function getSearchData(city) {
     try {
@@ -43,8 +19,33 @@ function WeatherProvider({ children, updateLoading }) {
     }
   }
 
+  // weather data api
+  async function getWeatherData(city) {
+    try {
+      updateLoading(true);
+      const response = await fetch(
+        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=8&aqi=no&alerts=no`
+      );
+      const data = await response.json();
+      setCurrentWeather({
+        humidity: data.current.humidity, //الرطوبه
+        windSpeed: data.current.wind_kph,
+        temperature: Math.floor(data.current.temp_c),
+        locationName: data.location.name,
+        locationCountry: data.location.country,
+        icon: data.current.condition.icon,
+        time: data.location.localtime,
+        condition: data.current.condition.text, // حاله الطقس
+        forecastDays: data.forecast.forecastday.slice(1),
+      });
+      updateLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
   useEffect(function () {
-    getWeatherData("London");
+    getWeatherData("Egypt");
   }, []);
 
   return (

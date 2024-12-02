@@ -17,4 +17,4 @@ function currentDay(date) {
   });
 }
 
-export { truncateText, convertTo12Hour,currentDay };
+export { truncateText, convertTo12Hour, currentDay };

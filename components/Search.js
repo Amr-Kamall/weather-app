@@ -32,7 +32,6 @@ export default function Search() {
     setOpenSearch(false);
   }
   const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
-
   return (
     <View style={styles.searchContainer}>
       <View style={styles.searchInputContainer}>
@@ -118,6 +117,7 @@ const styles = StyleSheet.create({
     right: 10,
     zIndex: 100000, // Ensure it appears above everything else
   },
+
   location: {
     paddingHorizontal: 10,
     paddingVertical: 15,

@@ -5,7 +5,9 @@ import { useWeather } from "../store/WeatherContext";
 import { convertTo12Hour } from "../helper";
 
 export default function Forecast() {
+  // london => الطقس درجه الحراره
   const { currentWeather } = useWeather();
+  console.log(currentWeather);
 
   return (
     <View style={styles.forecast}>
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
     zIndex: 1, // Keep it below locationsContainer but above the background
     justifyContent: "space-around",
     marginVertical: 10,
-    flex:1,
+    flex: 1,
   },
   cityLocation: {
     color: "white",
