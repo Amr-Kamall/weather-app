@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { CircleSnail } from "react-native-progress";
+import {CircleSnail} from "react-native-progress";
 
 export default function Loading() {
   return (

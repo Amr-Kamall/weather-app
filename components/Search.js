@@ -8,8 +8,7 @@ import {
 } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { colors, theme } from "../theme";
-import { useCallback, useState } from "react";
-import { debounce } from "lodash";
+import { useState } from "react";
 import { useWeather } from "../store/WeatherContext";
 import { truncateText } from "../helper";
 
@@ -50,7 +49,7 @@ export default function Search() {
           <Ionicons name="search" size={25} color="white" />
         </TouchableOpacity>
       </View>
-      {locations?.length > 0 && openSearch && (
+      {locations?.length > 0 && openSearch && ( // [london, london-dea, egypt]
         <View style={styles.locationsContainer}>
           {locations?.map((loc, index) => (
             <TouchableOpacity

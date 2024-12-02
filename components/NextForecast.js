@@ -7,7 +7,6 @@ import { currentDay } from "../helper";
 
 export default function NextForecast() {
   const { currentWeather } = useWeather();
-
   return (
     <View style={styles.nextForecast}>
       <View style={styles.forecastCalendar}>
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
   nextForecast: {
     marginVertical: 15,
     marginHorizontal: 10,
-
   },
   forecastCalendar: {
     flexDirection: "row",
