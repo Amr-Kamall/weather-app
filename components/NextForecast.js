@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   nextForecast: {
     marginVertical: 15,
     marginHorizontal: 10,
+
   },
   forecastCalendar: {
     flexDirection: "row",

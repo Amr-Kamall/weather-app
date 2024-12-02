@@ -1,18 +1,20 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 const WeatherContext = createContext();
+const API_KEY = "de26a555a0514f57997152428240212";
 
 function WeatherProvider({ children, updateLoading }) {
   const [locations, setLocations] = useState([]); //list search
-  const [currentWeather, setCurrentWeather] = useState({});
+  const [currentWeather, setCurrentWeather] = useState({}); //current weather
 
   // search data api
   async function getSearchData(city) {
     try {
       const response = await fetch(
-        `https://api.weatherapi.com/v1/search.json?key=f7b444cfa99e4757bdb205128242011&q=${city}`
+        `https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${city}`
       );
       const locationData = await response.json();
+      // console.log(locationData);
       setLocations(locationData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -24,7 +26,7 @@ function WeatherProvider({ children, updateLoading }) {
     try {
       updateLoading(true);
       const response = await fetch(
-        `https://api.weatherapi.com/v1/forecast.json?key=f7b444cfa99e4757bdb205128242011&q=${city}&days=8&aqi=no&alerts=no`
+        `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=8&aqi=no&alerts=no`
       );
       const data = await response.json();
       setCurrentWeather({
@@ -45,7 +47,7 @@ function WeatherProvider({ children, updateLoading }) {
   }
 
   useEffect(function () {
-    getWeatherData("Egypt");
+    getWeatherData("London");
   }, []);
 
   return (

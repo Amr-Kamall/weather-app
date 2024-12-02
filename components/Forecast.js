@@ -7,7 +7,10 @@ import { convertTo12Hour } from "../helper";
 export default function Forecast() {
   // london => الطقس درجه الحراره
   const { currentWeather } = useWeather();
-  console.log(currentWeather);
+
+  if (!currentWeather) {
+    return <Text>amr kamal</Text>;
+  }
 
   return (
     <View style={styles.forecast}>
@@ -19,11 +22,12 @@ export default function Forecast() {
         </Text>
       </Text>
       {/* weather image */}
+
       <View style={styles.weatherImageContainer}>
         <Image
           style={styles.weatherImage}
           // icon of api is very bad so we will use our own icons
-          source={weatherImages[currentWeather?.condition?.toLowerCase()]}
+          source={weatherImages[currentWeather?.condition?.toLowerCase()]} //partly cloudy
         />
       </View>
       {/* degree celcius */}
@@ -67,10 +71,10 @@ const styles = StyleSheet.create({
   // forecast section
   forecast: {
     alignItems: "center",
-    zIndex: 1, // Keep it below locationsContainer but above the background
+    zIndex: 10000, // Keep it below locationsContainer but above the background
     justifyContent: "space-around",
-    marginVertical: 10,
-    flex: 1,
+    marginVertical: 8,
+    flex:1
   },
   cityLocation: {
     color: "white",

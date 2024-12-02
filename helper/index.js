@@ -8,10 +8,11 @@ function convertTo12Hour(data) {
   const period = +hours >= 12 ? "PM" : "AM";
   return `${+hours % 12 || 12}:${+minutes
     .toString()
-    .padStart(2, "0")} ${period}`; //chatgpt
+    .padStart(2, "0")} ${period}`;
 }
 
 function currentDay(date) {
+  //date = "date": "2024-12-03",
   return new Date(date).toLocaleDateString("en-US", {
     weekday: "long",
   });

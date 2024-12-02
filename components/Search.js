@@ -31,13 +31,13 @@ export default function Search() {
     getWeatherData(cityName);
     setOpenSearch(false);
   }
-  const handleTextDebounce = useCallback(debounce(handleSearch, 500), []);
+
   return (
     <View style={styles.searchContainer}>
       <View style={styles.searchInputContainer}>
         {openSearch && (
           <TextInput
-            onChangeText={handleTextDebounce}
+            onChangeText={handleSearch}
             placeholder="Search City"
             style={styles.searchInput}
             placeholderTextColor="white"
@@ -76,8 +76,8 @@ export default function Search() {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    height: "9%",
-    marginTop: Platform.OS === "android" ? 40 : 0,
+    height: "11%",
+    marginTop: Platform.OS === "android" ? 30 : 0,
   },
 
   searchInputContainer: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     top: "100%", // Place it below the search input
     left: 10,
     right: 10,
-    zIndex: 100000, // Ensure it appears above everything else
+    zIndex: 100000, // to be above everything else
   },
 
   location: {

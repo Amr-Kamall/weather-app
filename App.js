@@ -23,7 +23,7 @@ export default function App() {
         ) : (
           <SafeAreaView style={styles.safeAreaView}>
             {/* search section */}
-            <Search /> 
+            <Search />
             {/* forecast section */}
             <Forecast />
             {/* forecast for next days */}
