@@ -1,5 +1,11 @@
 import { StatusBar } from "expo-status-bar";
-import { Image, SafeAreaView, StyleSheet, View } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useState } from "react";
 import Search from "./components/Search";
 import Loading from "./components/Loading";
@@ -24,10 +30,17 @@ export default function App() {
           <SafeAreaView style={styles.safeAreaView}>
             {/* search section */}
             <Search />
-            {/* forecast section */}
-            <Forecast />
-            {/* forecast for next days */}
-            <NextForecast />
+            {/* we use scrollView if the content become bigger than screen */}
+            <ScrollView
+              contentContainerStyle={{ flexGrow: 1 }}
+              scrollEnabled={false}
+              showsVerticalScrollIndicator={false}
+            >
+              {/* forecast section */}
+              <Forecast />
+              {/* forecast for next days */}
+              <NextForecast />
+            </ScrollView>
           </SafeAreaView>
         )}
       </View>
@@ -42,7 +55,7 @@ const styles = StyleSheet.create({
   },
   appContainer: {
     flex: 1,
-    position: "relative",
+    // position: "relative",
   },
   backgroundImage: {
     position: "absolute",

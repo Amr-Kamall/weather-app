@@ -29,6 +29,7 @@ function WeatherProvider({ children, updateLoading }) {
         `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${city}&days=8&aqi=no&alerts=no`
       );
       const data = await response.json();
+      // console.log("data ya amr:",data)
       setCurrentWeather({
         humidity: data.current.humidity, //الرطوبه
         windSpeed: data.current.wind_kph,
@@ -36,7 +37,7 @@ function WeatherProvider({ children, updateLoading }) {
         locationName: data.location.name,
         locationCountry: data.location.country,
         icon: data.current.condition.icon,
-        time: data.location.localtime,
+        time: data.location.localtime, 
         condition: data.current.condition.text, // حاله الطقس
         forecastDays: data.forecast.forecastday.slice(1),
       });
