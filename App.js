@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   appContainer: {
     flex: 1,
-    // position: "relative",
+    position: "relative",
   },
   backgroundImage: {
     position: "absolute",
